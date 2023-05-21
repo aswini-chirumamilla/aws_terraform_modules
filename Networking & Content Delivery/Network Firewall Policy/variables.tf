@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-2"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "terraform"
+  type        = string
+}
+
 # AWS Network Firewall Policy resource Variables
 variable "firewall_policy_name" {
   description = "A descriptive name of the firewall policy"
@@ -35,7 +47,7 @@ variable "stateful_rule_group_references" {
 }
 
 variable "stateful_default_actions" {
-  description = "The default actions to take on a packet that doesn't match any stateful rules. The stateful default action is optional, but must be provided when using the strict rule order. Also, all the AWS Managed rule groups have RuleOrder as DEFAULT_ACTION_ORDER"
+  description = "The default actions to take on a packet that doesn't match any stateful rules. The stateful default action is optional, but must be provided when using the strict rule order."
   type        = list(string)
   default     = []
 }

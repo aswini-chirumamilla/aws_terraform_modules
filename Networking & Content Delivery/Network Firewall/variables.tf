@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-2"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "terraform"
+  type        = string
+}
+
 # AWS Network Firewall resource Variables
 variable "firewall_name" {
   description = "The descriptive name of the Network Firewall."
@@ -27,7 +39,7 @@ variable "firewall_vpc_id" {
 
 variable "firewall_subnets" {
   description = "Set of configuration blocks describing the public subnets. Each subnet must belong to a different Availability Zone in the VPC. AWS Network Firewall creates a firewall endpoint in each subnet."
-  type        = list(any)
+  type        = list(string)
 }
 
 variable "firewall_policy_change_protection" {

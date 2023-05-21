@@ -1,3 +1,12 @@
+variable "aws_region" {
+  description = "Name of region selected"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "Name of profile"
+  type        = string
+}
 ########################################
 # Variable for Delegation id
 ########################################

@@ -1,6 +1,6 @@
-# AWS Network Firewall
+# AWS Network Firewall ARN
 output "network_firewall_arn" {
   description = "AWS Network Firewall ARN"
-  value       = aws_networkfirewall_firewall.network_firewall.arn
+  value       = module.network_firewall.network_firewall_arn
 
 }

@@ -1,3 +1,13 @@
+variable "aws_profile" {
+  description = "Name of profile"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "Name of region"
+  type        = string
+}
+
 variable "iam_role_arn" {
   description = "The ARN for the IAM role that's used to post flow logs to a CloudWatch Logs log group"
   type        = string

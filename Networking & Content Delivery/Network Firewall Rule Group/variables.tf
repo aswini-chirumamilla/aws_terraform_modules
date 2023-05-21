@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-2"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "terraform"
+  type        = string
+}
+
 # AWS Network Firewall resource Variables
 variable "rule_group_name" {
   description = "The descriptive name of the Network Firewall Rule Group."

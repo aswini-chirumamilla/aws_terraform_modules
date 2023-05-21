@@ -1,3 +1,13 @@
+variable "aws_profile" {
+  description = "Name of profile"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "Name of region"
+  type        = string
+}
+
 variable "connectivity_type" {
   description = "Connectivity type for the gateway."
   type        = string
@@ -14,11 +24,11 @@ variable "tags" {
 }
 
 variable "subnet_id" {
-  description = "The Subnet ID of the subnet in which to place the gateway."
+  description = "The subnet address to assign to the NAT gateway."
   type        = string
 }
 
-variable "allocation_id" {
-  description = "The Allocation ID of the Elastic IP address for the gateway."
+variable "vpc_id" {
+  description = "The vpcid to assign to the NAT gateway."
   type        = string
 }

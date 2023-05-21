@@ -1,3 +1,12 @@
+variable "aws_region" {
+  description = " Name of region "
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "Name of profile"
+  type        = string
+}
 
 variable "aws_vpc_cidr" {
   description = "CIDR block for VPC"
@@ -86,8 +95,3 @@ variable "vpc_tags" {
   description = "A map of tags to assign to the resource"
   type        = map(string)
 }
-
-
-
-
-

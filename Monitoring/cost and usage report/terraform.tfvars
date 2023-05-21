@@ -1,0 +1,14 @@
+aws_region                 = "us-east-1"
+aws_profile                = "terraform"
+report_name                = "cur-report-definition"
+time_unit                  = "HOURLY"
+format                     = "textORcsv"
+compression                = "GZIP"
+additional_schema_elements = ["RESOURCES"]
+additional_artifacts       = ["REDSHIFT", "QUICKSIGHT"]
+s3policy_filepath          = "s3_policy"
+s3_region                  = "us-east-1"
+s3_prefix                  = "s3_prefix"
+refresh_closed_reports     = true
+report_versioning          = "CREATE_NEW_REPORT"
+s3_bucket                  = "bucket-terraform-05" 

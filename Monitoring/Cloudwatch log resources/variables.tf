@@ -1,3 +1,17 @@
+#providers
+
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+}
+
+#Variables for Cloudwatch Log
+
 variable "log_group_name" {
   type        = string
   description = "(Required) The name of the log group. If omitted, Terraform will assign a random, unique name."

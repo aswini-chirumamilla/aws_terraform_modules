@@ -1,0 +1,17 @@
+aws_region                       = "ap-northeast-1"
+aws_profile                      = "awscli_usman1"
+cloudtrail_bucket_name           = "tf-cloudtrail-logging-test-bucket-usman"
+cloudtrail_name                  = "tf-trail-new-cloudtrail"
+ct_s3_key_prefix                 = "prefix"
+ct_include_global_service_events = true
+enable_logging                   = true
+enable_log_file_validation       = true
+sns_topic_name                   = null
+is_multi_region_trail            = true
+is_organization_trail            = false
+force_destroy                    = true
+read_write_type                  = "All"
+include_management_events        = true
+exclude_management_event_sources = ["kms.amazonaws.com"]
+data_resource_type               = "AWS::S3::Object"
+data_resource_values             = ["arn:aws:s3"]

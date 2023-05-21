@@ -1,0 +1,19 @@
+aws_region                           = "us-east-1"
+aws_profile                          = "terraform-practice"
+aws_vpc_cidr                         = "10.0.0.0/16"
+enable_dns_hostnames                 = true
+enable_dns_support                   = true
+instance_tenancy_vpc                 = "default"
+ipv4_ipam_pool_id                    = "ipam-pool-0955201f02e25a3b4"
+ipv4_netmask_length                  = 28
+ipv6_ipam_pool_id                    = null
+ipv6_netmask_length                  = null
+ipv6_cidr_block                      = ""
+ipv6_cidr_block_network_border_group = null
+enable_classiclink                   = false
+enable_classiclink_dns_support       = false
+assign_generated_ipv6_cidr_block     = true
+vpc_tags = {
+  name = "vpc-tf"
+  dev  = "prod"
+}

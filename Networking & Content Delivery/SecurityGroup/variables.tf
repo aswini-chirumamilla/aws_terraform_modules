@@ -1,3 +1,13 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+}
+
 variable "security_group_name" {
   description = "Name of the security group. If omitted, Terraform will assign a random, unique name"
   type        = string
@@ -20,7 +30,6 @@ variable "sg_description" {
 
 variable "name_prefix" {
   description = "Creates a unique name beginning with the specified prefix. Conflicts with name"
-  default     = ""
   type        = string
 }
 
@@ -31,7 +40,7 @@ variable "revoke_rules_on_delete" {
 }
 
 variable "sg_ingress" {
-  description = "Configuration block for ingress rules. The following arguments are required: from_port, to_port, protocol,The following arguments are optional: cidr_blocks, description, ipv6_cidr_blocks, prefix_list_ids, security_groups, self "
+  description = "Configuration block for ingress rules. The following arguments are required: from_port, to_port, protocol, cidr_blocks, description, ipv6_cidr_blocks, prefix_list_ids, security_groups, self "
   type = list(object({
     from_port        = number
     to_port          = number
@@ -46,7 +55,20 @@ variable "sg_ingress" {
 }
 
 variable "sg_egress" {
-  description = "Configuration block for egress rules. The following arguments are required: from_port, to_port, The following arguments are optional:protocol, cidr_blocks, description, ipv6_cidr_blocks, prefix_list_ids, security_groups, self "
+  description = ""
+  default = [
+    {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      description      = ""
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      security_groups  = []
+      self             = false
+    }
+  ]
   type = list(object({
     from_port        = number
     to_port          = number

@@ -1,4 +1,4 @@
 output "sg_id" {
-  value       = aws_security_group.tfsg.id
+  value       = module.security_group.sg_id
   description = "ID of the security group"
 }
