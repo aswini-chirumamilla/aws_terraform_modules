@@ -1,3 +1,13 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+}
+
 variable "image_recipe_arn" {
   description = "ARN of image recipe"
   type        = string
@@ -58,7 +68,7 @@ variable "timeout_minutes" {
 variable "schedule" {
   description = "Cron expression of how often the pipeline start condition is evaluated"
   type        = string
-  default     = "cron(30 10 1 * *)"
+  default     = "cron(0 0 * * ? *)"
 }
 
 variable "tags" {

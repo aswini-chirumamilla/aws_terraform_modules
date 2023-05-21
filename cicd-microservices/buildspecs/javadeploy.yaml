@@ -1,0 +1,33 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.17/2023-01-11/bin/linux/amd64/kubectl
+      - curl -Lo aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.9/aws-iam-authenticator_0.5.9_linux_amd64
+      - chmod +x ./kubectl
+      - chmod +x ./aws-iam-authenticator
+      - mkdir -p $HOME/bin
+      - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+      - cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+      - cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator
+      - export PATH=$PATH:$HOME/bin
+      - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+  pre_build:
+    commands:
+      - aws s3 cp s3://$Project-devops-$AwsRegion-templates/k8stemplate.yaml  k8sdeploy.yaml
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - cat k8sdeploy.yaml
+      - sed -i 's/$REPLICAS/1/g'                                      k8sdeploy.yaml
+      - sed -i 's/$NAMESPACE/'$Namespace'/g'                          k8sdeploy.yaml
+      - sed -i 's/$SERVICE/'$ServiceName'/g'                          k8sdeploy.yaml
+      - sed -i 's/$CNTR-PORT/'$ContainerPort'/g'                      k8sdeploy.yaml
+      - sed -i 's|$IMAGETAG|'$ImageTagPrefix'-'$ImageTagSuffix'|g'    k8sdeploy.yaml
+      - sed -i 's/$ENV/'$Environment'/g'                              k8sdeploy.yaml
+      - sed -i 's/$ACCOUNT/'$ACCOUNT_ID'/g'                           k8sdeploy.yaml
+      - sed -i 's/$REGION/'$AwsRegion'/g'                             k8sdeploy.yaml
+      - cat k8sdeploy.yaml
+  post_build:
+    commands:
+      - aws eks update-kubeconfig --region $AwsRegion --name $EKSClusterName
+      - kubectl get nodes
+      - kubectl apply -f k8sdeploy.yaml

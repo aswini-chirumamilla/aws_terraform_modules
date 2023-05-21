@@ -1,0 +1,26 @@
+version: 0.2
+#
+# DEFINE VARIABLES-FROM-PIPELINES
+#   1. AwsRegion 2. ServiceName 3. ImageTagPrefix(develop/release) 4. ImageTagSuffix(commitid) 5. SonarHost 6. SonarToken
+#
+phases:
+  install:
+    commands:
+      - apt-get install -y jq
+  pre_build:
+    commands:
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$AwsRegion.amazonaws.com/$ServiceName
+      - #mvn sonar:sonar -Dsonar.projectKey=${ImageTagPrefix}-${ServiceName}  -Dsonar.host.url=${SonarHost} -Dsonar.login=${SonarToken} -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco-ut/jacoco.xml
+  build:
+    commands:
+      - mvn clean install
+      - aws ecr get-login-password --region $AwsRegion | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AwsRegion.amazonaws.com
+      - docker build -t springimage .
+      - docker tag springimage $REPOSITORY_URI:$ImageTagPrefix-$ImageTagSuffix
+  post_build:
+    commands:
+      - docker push $REPOSITORY_URI:$ImageTagPrefix-$ImageTagSuffix
+artifacts:
+  files:
+    - "*"

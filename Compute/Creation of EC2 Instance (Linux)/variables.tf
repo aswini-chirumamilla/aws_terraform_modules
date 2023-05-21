@@ -1,3 +1,15 @@
+variable "region" {
+  description = " Name of region "
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "profile" {
+  description = "Name of profile"
+  type        = string
+  default     = "terraform-rishi-aws"
+}
+
 variable "most_recent_ami" {
   description = "If more than one result is returned, use the most recent AMI"
   default     = true
@@ -162,7 +174,7 @@ variable "enclave_options_enabled" {
 
 variable "ephemeral_block_device" {
   description = " One or more configuration blocks to customize Ephemeral (also known as 'Instance Store') volumes on the instance"
-  default     = []
+  default     = null
   type = list(object({
     device_name  = string
     no_device    = bool
@@ -197,6 +209,7 @@ variable "e2_associate_public_ip_address" {
   type        = string
 }
 
+
 variable "root_block_device" {
   description = "Configuration block to customize details about the root block device of the instance"
   default     = [
@@ -223,7 +236,7 @@ variable "ec2_ebs_device" {
 
       device_name = "/dev/xvdb"
       tags = {
-      FileSystem = "/web/data"
+        FileSystem = "/web/data"
       }
       volume_size = "10"
       volume_type = "gp3"
@@ -240,7 +253,7 @@ variable "ec2_ebs_device" {
 
 variable "common_tags" {
   description = "common tags for all resources ec2, ebs storage , root block storage"
-  type = map(string)
+  type        = map(string)
 }
 
 

@@ -1,3 +1,15 @@
+#providers
+
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+}
+
 # variables of application load balancer
 
 variable "project_name" {
@@ -81,8 +93,6 @@ variable "ip_address_type" {
     error_message = "IP Address Type should be ipv4 or dualstack"
   }
 }
-
-
 variable "access_bucket" {
   type        = string
   description = "(Required) The S3 bucket name to store the logs in."
@@ -182,7 +192,6 @@ variable "unhealthy_threshold" {
   }
 }
 
-
 variable "lambda_multi_value" {
   type        = bool
   default     = false
@@ -223,6 +232,10 @@ variable "cookie_duration" {
 variable "cookie_name" {
   type        = string
   description = "(Optional) Name of the application based cookie."
+  validation {
+    condition     = var.cookie_name != "AWSALB" || var.cookie_name != "AWSALBAPP" || var.cookie_name != "AWSALBTG"
+    error_message = "AWSALB, AWSALBAPP, and AWSALBTG prefixes are reserved and cannot be used."
+  }
 }
 
 variable "stick_enabled" {

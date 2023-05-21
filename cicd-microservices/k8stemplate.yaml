@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $SERVICE
+  namespace: $NAMESPACE
+spec:
+  selector:
+    matchLabels:
+      app: $SERVICE
+      env: $ENV
+  replicas: $REPLICAS
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: $SERVICE
+        env: $ENV
+    spec:
+      containers:
+        - name: $SERVICE
+          image: $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$SERVICE:$IMAGETAG
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $SERVICE
+  namespace: $NAMESPACE
+spec:
+  selector:
+    app: $SERVICE
+    env: $ENV
+  ports:
+    - name: http
+      port: $CNTR-PORT
+  type: ClusterIP

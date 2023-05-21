@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-1"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "RishiHazra"
+  type        = string
+}
+
 variable "component_name" {
   description = "Name of Image Builder component"
   type        = string
@@ -41,7 +53,6 @@ variable "supported_os_versions" {
 variable "component_document" {
   description = "Name of file in which YAML script is written , which has the data of the component. Exactly one of component_document or uri should be specified."
   default     = null
-  type        = string
 }
 
 variable "uri" {

@@ -1,3 +1,15 @@
+variable "region" {
+  description = " Name of region "
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "profile" {
+  description = "Name of profile"
+  type        = string
+  default     = "terraform-rishi-aws"
+}
+
 variable "most_recent_ami" {
   description = "If more than one result is returned, use the most recent AMI"
   default     = true
@@ -19,7 +31,7 @@ variable "ami_filter" {
 
 variable "instanceType" {
   description = "Type of instance"
-  type        = string
+  type        = list(string)
 }
 
 variable "ec2_sg_ids" {
@@ -85,7 +97,7 @@ variable "host_id" {
 }
 
 variable "iam_instance_profile" {
-  description = " IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile. Ensure your credentials have the correct permission to assign the instance profile according to the"
+  description = "IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile. Ensure your credentials have the correct permission to assign the instance profile according to the"
   default     = null
   type        = string
 }

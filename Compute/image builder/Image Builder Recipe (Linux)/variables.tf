@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-1"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "RishiHazra"
+  type        = string
+}
+
 variable "recipe_name" {
   description = "Name of image recipe"
   type        = string
@@ -103,7 +115,6 @@ variable "volume_type" {
 }
 
 variable "component" {
-  description = "Ordered configuration block(s) with components for the image recipe. "
   type = list(object({
     component_arn = string
     parameter = optional(list(object({

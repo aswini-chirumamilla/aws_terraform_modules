@@ -1,3 +1,15 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-2"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "terraform-practice"
+  type        = string
+}
+
 #aws_elastic_beanstalk_application resource variables
 variable "app_name" {
   description = "name for the ebs application"

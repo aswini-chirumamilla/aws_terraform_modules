@@ -1,3 +1,13 @@
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+
+}
+
 variable "infra_config_name" {
   description = "Name of the infrastructure configuration resource"
   type        = string
@@ -64,7 +74,7 @@ variable "logging" {
   })
 }
 
-variable "tags" {
+variable "imagebuilder_infra_config_tags" {
   description = "tags for imagebuilder infrastructure configuration"
   type        = map(string)
 }

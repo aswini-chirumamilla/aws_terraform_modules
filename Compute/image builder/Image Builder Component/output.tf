@@ -1,4 +1,4 @@
 output "component_arn" {
-  value       = aws_imagebuilder_component.component.arn
+  value       = module.imagebuilder_component.component_arn
   description = "Component ARN of the image builder "
 }

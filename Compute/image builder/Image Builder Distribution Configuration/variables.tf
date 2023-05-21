@@ -1,3 +1,17 @@
+#----------------------Variables for Provider-----------------------------------------------------------#
+
+variable "aws_region" {
+  description = "AWS_Region"
+  default     = "us-east-1"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  default     = "RishiHazra"
+  type        = string
+}
+
 #----------------------Variables for Distribution Configuration resource-----------------------------------------------------------#
 
 variable "distribution_configuration_name" {
@@ -19,12 +33,12 @@ variable "distribution" {
       ami_tags                    = optional(map(string))      # (Optional) Key-value map of tags to apply to the distributed AMI.
       distributed_ami_description = optional(string)           # (Optional) Description to apply to the distributed AMI.
       kms_key_id                  = optional(string)           # (Optional) Amazon Resource Name (ARN) of the Key Management Service (KMS) Key to encrypt the distributed AMI.
-      distributed_ami_name        = optional(string)           # (Optional) Name to apply to the distributed AMI.
+      distributed_ami_name        = string                     # (Optional) Name to apply to the distributed AMI.
       target_account_ids          = optional(list(string))     # (Optional) Set of AWS Account identifiers to distribute the AMI.
       launch_permission = optional(list(object({               # (Optional) Configuration block of EC2 launch permissions to apply to the distributed AMI. 
         organization_arns        = optional(list(string))      # (Optional) Set of AWS Organization ARNs to assign.
-        organizational_unit_arns = optional(list(string))      # (Optional) Set of AWS Organizational Unit ARNs to assign.
-        user_groups              = optional(list(string))      # (Optional) Set of EC2 launch permission user groups to assign. Use all to distribute a public AMI.
+        organizational_unit_arns = optional(list(string ), null)      # (Optional) Set of AWS Organizational Unit ARNs to assign.
+        user_groups              = optional(list(string), null)      # (Optional) Set of EC2 launch permission user groups to assign. Use all to distribute a public AMI.
         account_ids              = optional(list(string))      # (Optional) Set of AWS Account identifiers to assign.
       })))
     })))
@@ -34,7 +48,7 @@ variable "distribution" {
       max_parallel_launches = optional(number)         # (Optional) The maximum number of parallel instances that are launched for creating resources.
       launch_template = optional(list(object({         # (Optional) Configuration block for the launch template that the fast-launch enabled Windows AMI uses when it launches Windows instances to create pre-provisioned snapshots.
         launch_template_id      = optional(string)     # (Optional) The ID of the launch template to use for faster launching for a Windows AMI.
-        launch_template_name    = optional(string)     # (Optional) The name of the launch template to use for faster launching for a Windows AMI.
+        launch_template_name    = optional(string , null)     # (Optional) The name of the launch template to use for faster launching for a Windows AMI.
         launch_template_version = optional(string)     # (Optional) The version of the launch template to use for faster launching for a Windows AMI.
       })))
       snapshot_configuration = optional(list(object({ # (Optional) Configuration block for managing the number of snapshots that are created from pre-provisioned instances for the Windows AMI when faster launching is enabled. 

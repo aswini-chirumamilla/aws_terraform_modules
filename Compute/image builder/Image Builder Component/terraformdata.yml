@@ -1,0 +1,29 @@
+name: Download AWS CLI version 2
+schemaVersion: 1.0
+parameters:
+  - Source:
+      type: string
+      description: The AWS CLI installer source URL.
+phases:
+  - name: build
+    steps:
+      - name: Download
+        action: WebDownload
+        inputs:
+          - source: '{{ Source }}'
+            destination: 'C:\Windows\Temp\AWSCLIV2.msi'
+
+#For Linux platform , write the following code for creating component
+
+#name: update-linux-os
+#description: Updates Linux with the latest security updates.
+#schemaVersion: 1.0
+#phases:
+#  - name: build
+#    steps:
+#    - name: InstallApache
+#      action: ExecuteBash
+#      inputs:
+#        commands :
+#          - sudo yum install httpd -y
+#          - sudo service httpd start
