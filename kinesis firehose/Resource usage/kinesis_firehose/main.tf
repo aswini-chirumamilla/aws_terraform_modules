@@ -1,0 +1,19 @@
+module "kinesis_firehose_delivery" {
+  source                            = "../../../Modules/Analytics/kinesis_firehose"
+  extended_s3_stream                = var.extended_s3_stream
+  destination_S3                    = var.destination_S3
+  tags                              = var.tags
+  extended_s3_configuration         = var.extended_s3_configuration
+  destination_redshift              = var.destination_redshift
+  redshift_name                     = var.redshift_name
+  s3_configuration                  = var.s3_configuration
+  redshift_configuration            = var.redshift_configuration
+  extended_s3_stream_dynamic        = var.extended_s3_stream_dynamic
+  destination_S3_dynamic            = var.destination_S3_dynamic
+  elasticsearch_name                = var.elasticsearch_name
+  destination_elasticsearch         = var.destination_elasticsearch
+  elasticsearch_configuration       = var.elasticsearch_configuration
+  HTTP_endpoint_name                = var.HTTP_endpoint_name
+  destination_HTTP                  = var.destination_HTTP
+  http_endpoint_configuration       = var.http_endpoint_configuration
+}
