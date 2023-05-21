@@ -1,4 +1,16 @@
-#--------------------------------------Variables related to EBS Volume resource-------------------------------------------------#
+#--------------------------------------Variables related to Provider-----------------------------------------------------------------#
+
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS Profile"
+  type        = string
+}
+
+#--------------------------------------Variables related to EBS Volume resource-----------------------------------------------------#
 
 variable "ebs_volumes" {
   description = "A configuration block that defines required and optional arguments for the creation of ebs volumes."
@@ -37,3 +49,4 @@ variable "create_ebs_snapshot" {
   type        = bool
   default     = false
 }
+

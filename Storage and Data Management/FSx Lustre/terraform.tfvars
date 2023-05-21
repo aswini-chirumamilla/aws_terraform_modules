@@ -1,0 +1,26 @@
+aws_region                  = "us-east-1"
+aws_profile                 = "terraform"
+capacity                    = 1200
+subnet_id                   = ["subnet-0697a6dd60a561993"]
+per_unit_storage_throughput = 200
+s3_import_path              = "s3://fsxbucket717/fsx/"
+s3_export_path              = "s3://fsxbucket717/fsx/"
+level                       = "DISABLED"
+file_system_type_version    = 2.12
+storage_type                = "SSD"
+deployment_type             = "PERSISTENT_1"
+imported_file_chunk_size    = 1024
+data_compression_type       = "LZ4"
+auto_import_policy          = "NEW"
+copy_tags_to_backups        = false
+#security_group_ids                = ["sg-0f796414d3c3d61fd"]
+#backup_id                         = "backup-094facd235e273b8c"
+#weekly_maintenance_start_time = "7:30:00"
+#backup_days                       = 6
+#drive_cache_type                  = "READ"
+#daily_automatic_backup_start_time = "23:30:00"
+#kms_key_alias_name = "eks-kms"
+#auto_import_policy          = "NONE"
+tags = {
+  "Environment" = "Testing"
+}

@@ -1,4 +1,4 @@
-variable "cluster_name" {
+variable "cluster-name" {
     type        = string
     description = "Name of Cluster"
 }
@@ -57,7 +57,7 @@ variable "server_side_encryption" {
 variable "cluster_endpoint_encryption_type" {
     type        = string
     description = "The type of encryption the cluster's endpoint should support. Valid values are NONE and TLS"
-    default     = "TLS"
+    default     = "NONE"
 }
 
 variable "availability_zones" {

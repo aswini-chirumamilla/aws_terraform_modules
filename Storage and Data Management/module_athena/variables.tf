@@ -1,5 +1,17 @@
 # module athena database
 
+variable "aws_region" {
+  description = "The variable mentions the aws region in which the resource will be created"
+  type        = string
+  default     = "ap-south-1"
+}
+
+variable "aws_profile" {
+  description = "The variable mentions the aws cli profile which will be used for the resource creation"
+  type        = string
+}
+
+
 variable "athena_database" {
   description = "The variable is used to hold the configuration for the athena database."
   type = map(object({

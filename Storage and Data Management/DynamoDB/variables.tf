@@ -140,7 +140,7 @@ variable "tags" {
     "name"        = "P03_Sachin"
     "pid"         = "P03"
     "prj-name"    = "AWS GDS CIL Team"
-    "owner"       = ""
+    "owner"       = "sachin.padasali@gds.ey.com"
   }
 }
 

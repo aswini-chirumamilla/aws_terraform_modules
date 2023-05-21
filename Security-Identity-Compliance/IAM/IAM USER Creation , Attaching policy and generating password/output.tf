@@ -1,9 +1,9 @@
 output "Policy-ARNs" {
   description = "ARN of the policy created"
-  value       = aws_iam_policy.custom_policy.*.policy
+  value       = module.iam_user.Policy-ARNs
 }
 
 output "User-names" {
   description = "IAM user-name"
-  value       = aws_iam_user.users.*.name
+  value       = module.iam_user.User-names
 }

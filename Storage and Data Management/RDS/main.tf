@@ -1,156 +1,108 @@
-data "aws_ssm_parameter" "rds_pwd" {
-    name = var.parameter_name
-}
+module "create_rds" {
+    source = "../../../Modules/Storage and Data Management/RDS"
 
-locals {
-    ### For db_parameter_group
-    db_pg = (lookup(var.pg_main["main"],"name", null) != null && lookup(var.pg_replica["replica"], "name", null) != null) ? merge(var.pg_main, var.pg_replica) : lookup(var.pg_main["main"], "name") != null ? var.pg_main : lookup(var.pg_replica["replica"], "name") != null ? var.pg_replica : tomap({})
-
-    ### For db_subnet_group
-    db_sg = (lookup(var.sg_main["main"], "subnet_group_name", null) != null && lookup(var.sg_replica["replica"], "subnet_group_name", null) != null) ? merge(var.sg_main, var.sg_replica) : lookup(var.sg_main["main"], "subnet_group_name", null) != null ? var.sg_main : lookup(var.sg_replica["replica"], "subnet_group_name") != null ? var.sg_replica : tomap({})
-
-    ### For Read replica
-    is_read_replica         = length(var.identifier_replica) == 0 ? false : true
-    backup_retention_period = local.is_read_replica ? 0 : var.backup_retention_period
-    skip_final_snapshot     = local.is_read_replica ? true : var.skip_final_snapshot
-    copy_tags_to_snapshot   = local.is_read_replica ? false : var.copy_tags_to_snapshot
-}
-
-#---------------------------RDS Components---------------------------#
-### Creation of db parameter group objects
-resource "aws_db_parameter_group" "db_parm_group" {
-    for_each = local.db_pg
-
-    name        =  lookup(each.value, "name", null)
-    family      =  lookup(each.value, "family", null)
-    tags        = var.tags
-
-    dynamic "parameter" {
-        for_each = lookup(each.value, "db_parameters", null)
-
-        content {
-            name    = parameter.value.name
-            value   = parameter.value.value
-        }
+    providers = {
+        aws.cross-replicate = aws.cross-replicate
     }
+    # ### parameter group for mysql
+    # pg_main                               = {
+    #                                             "family"    = "mysql5.7"
+    #                                             "name"      = "rds-mysqlpg"
+    #                                             "temp_key"  = "pg_main"
+    #                                             "db_parameters" = [{
+    #                                                                         "name"  = "character_set_server"
+    #                                                                         "value" = "utf8"
+    #                                                                     },
+    #                                                                     {
+    #                                                                         "name"  = "character_set_client"
+    #                                                                         "value" = "utf8"
+    #                                                                     }]
+    #                                         }
 
-    lifecycle{
-        create_before_destroy = true
-    } 
-}
+    ### parameter group for postgres
+    # pg_main                               = {"main" = {
+    #                                             "family"    = "postgres13"
+    #                                             "name"      = "rds-postgrespg-main"
+    #                                             "temp_key"  = "pg_main"
+    #                                             "db_parameters"  = [{
+    #                                                                     "name"  = "log_connections"
+    #                                                                     "value" = "1"
+    #                                                                 }]
+    #                                         }}
 
-### creation of db subnet group objects
-resource "aws_db_subnet_group" "db_subnet_group" {
-    for_each = local.db_sg
+    # pg_replica                            = {"replica" = {
+    #                                             "family"    = "postgres13"
+    #                                             "name"      = "rds-postgrespg-replica"
+    #                                             "temp_key"  = "pg_main"
+    #                                             "db_parameters"  = [{
+    #                                                                     "name"  = "log_connections"
+    #                                                                     "value" = "1"
+    #                                                                 }]
+    #                                         }}
 
-    name        = lookup(each.value, "subnet_group_name", null)
-    subnet_ids  = lookup(each.value, "subnet_ids", null)
-    tags        = var.tags
-}
+    # # use_pg_main                           = false 
+    # sg_main                               = {"main" = {
+    #                                             "subnet_group_name"     = "test-subnet-main"
+    #                                             "subnet_ids"            = ["subnet-0860766f6f5764cfb", "subnet-0c44cc0354fb5380a"]
+    #                                             "temp_key"              = "sg_main"
+    #                                         }}
 
-#---------------------------RDS Instances---------------------------#
-### Main RDS Instance creation
-resource "aws_db_instance" "main_instance" {
-    lifecycle {
-        ignore_changes = [ password, snapshot_identifier, ]
+    allocated_storage                     = 10
+    allow_major_version_upgrade           = false
+    apply_immediately                     = true
+    auto_minor_version_upgrade            = true
+    availability_zone                     = ["us-west-2b", "us-west-2c"]
+    backup_retention_period               = 2
+    backup_window                         = "00:00-01:00"
+    blue_green_update                     = false
+    db_name                               = "test_db"
+    # db_options                            = {}
+
+    delete_automated_backups              = true
+    deletion_protection                   = false
+
+    # ### Values for mysql
+    # enabled_cloudwatch_logs_exports       = ["error","slowquery"]
+    # engine                                = "mysql"
+    # engine_version                        = "5.7"
+
+    ### Values for postgres
+    enabled_cloudwatch_logs_exports       = ["postgresql","upgrade"]
+    engine                                = "postgres"
+    engine_version                        = "13.4"
+
+    identifier_main                       = "test-main"
+    identifier_prefix                     = "Terraform-RDS"
+    instance_class                        = "db.t3.micro"
+    maintenance_window                    = "sun:08:00-sun:12:00"
+    max_allocated_storage                 = 25
+    multi_az                              = false
+    parameter_name                        = "db_user1"
+    performance_insights_enabled          = false
+    performance_insights_retention_period = 7
+
+    port                                  = 3306
+    publicly_accessible                   = false
+    skip_final_snapshot                   = true
+    final_snapshot_identifier             = "test-final-snapshot"
+    storage_encrypted                     = true
+    storage_type                          = "gp2"
+
+    tags = {
+        "CreatedBy": "Terraform",
+        "Environment": "Testing",
+        "name": "P03_Sachin",
+        "owner": "",
+        "pid": "P03",
+        "prj-name": "AWS GDS CIL Team"
     }
+    username                              = "user1"
+    vpc_security_group_ids                = ["sg-0022e1a6614303a6a", "sg-0750fb0777cf9735b"]
 
-    allocated_storage               = var.allocated_storage
-    max_allocated_storage           = var.max_allocated_storage
-    storage_type                    = var.storage_type
-    iops                            = var.iops
-    storage_encrypted               = var.storage_encrypted
-    kms_key_id                      = var.kms_key_id 
+    # create_replica_instance               = true
+    identifier_replica                    = ["replica-1"]
+    cross_replication                     = true
+    cross_region_kms_key_id               = "arn:aws:kms:ap-south-1:239312700453:key/0d3f0046-542a-40bf-81b1-6d916adb3424"
+    cross_region_backup_retention_period  = 10
 
-    db_name                         = var.db_name
-    engine                          = var.engine
-    engine_version                  = var.engine_version
-    username                        = var.username
-    password                        = data.aws_ssm_parameter.rds_pwd.value
-
-    parameter_group_name            = lookup(var.pg_main["main"],"name", null) != null ? aws_db_parameter_group.db_parm_group["main"].name : null
-
-    instance_class                  = var.instance_class
-    port                            = var.port
-    deletion_protection             = var.deletion_protection
-    identifier                      = var.identifier_main
-
-    db_subnet_group_name            = lookup(var.sg_main["main"], "subnet_group_name", null) != null ? aws_db_subnet_group.db_subnet_group["main"].id : null
-
-    skip_final_snapshot             = var.skip_final_snapshot
-    final_snapshot_identifier       = var.final_snapshot_identifier
-    copy_tags_to_snapshot           = var.copy_tags_to_snapshot
-    snapshot_identifier             = var.snapshot_identifier
-
-    multi_az                        = var.multi_az
-    publicly_accessible             = var.publicly_accessible
-
-    allow_major_version_upgrade     = var.allow_major_version_upgrade
-    auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-    apply_immediately               = var.apply_immediately
-    maintenance_window              = var.maintenance_window
-
-    backup_retention_period         = var.backup_retention_period
-    backup_window                   = var.backup_window
-    monitoring_interval             = var.monitoring_interval
-    monitoring_role_arn             = var.monitoring_role_arn
-    performance_insights_enabled    = var.performance_insights_enabled
-    enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-    tags                            = var.tags 
-}
-
-### Replica of the main RDS Instance 
-resource "aws_db_instance" "replica_instance" {
-    lifecycle {
-        ignore_changes = [ snapshot_identifier, ]
-    }
-
-    count = length(var.identifier_replica) != 0 ? length(var.identifier_replica) : 0
-
-    replicate_source_db             = "${aws_db_instance.main_instance.id}"
-    storage_type                    = var.storage_type
-    iops                            = var.iops
-    storage_encrypted               = var.storage_encrypted
-    kms_key_id                      = var.kms_key_id 
-
-    parameter_group_name            = lookup(var.pg_replica["replica"], "name", null) != null ? aws_db_parameter_group.db_parm_group["replica"].name : (lookup(var.pg_main["main"], "name", null) != null ? aws_db_parameter_group.db_parm_group["main"].name : null)
-
-    instance_class                  = var.instance_class
-    port                            = var.port
-    deletion_protection             = var.deletion_protection
-    identifier                      = var.identifier_replica[count.index]
-
-    db_subnet_group_name            = lookup(var.sg_replica["replica"], "subnet_group_name", null) != null ? aws_db_subnet_group.db_subnet_group["replica"].id : null
-
-    skip_final_snapshot             = local.skip_final_snapshot
-    final_snapshot_identifier       = var.final_snapshot_identifier
-    copy_tags_to_snapshot           = local.copy_tags_to_snapshot
-    snapshot_identifier             = var.snapshot_identifier
-
-    multi_az                        = var.multi_az
-    publicly_accessible             = var.publicly_accessible
-
-    allow_major_version_upgrade     = var.allow_major_version_upgrade
-    auto_minor_version_upgrade      = var.auto_minor_version_upgrade
-    apply_immediately               = var.apply_immediately
-    maintenance_window              = var.maintenance_window
-
-    backup_retention_period         = local.backup_retention_period
-    backup_window                   = var.backup_window
-    monitoring_interval             = var.monitoring_interval
-    monitoring_role_arn             = var.monitoring_role_arn
-    performance_insights_enabled    = var.performance_insights_enabled
-    enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-    tags                            = var.tags
-}
-
-### Backup Replication of the main RDS Instance in another AWS Region
-resource "aws_db_instance_automated_backups_replication" "cross_region_replica" {
-
-    count = var.cross_replication && !(var.engine == "mysql" || var.engine == "mariadb") ? 1 : 0
-    source_db_instance_arn          = "${aws_db_instance.main_instance.arn}"
-    retention_period                = var.cross_region_backup_retention_period
-    kms_key_id                      = var.cross_region_kms_key_id
-
-    provider = aws.cross-replicate
 }

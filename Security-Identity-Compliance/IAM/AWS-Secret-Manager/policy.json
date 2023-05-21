@@ -1,0 +1,12 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+		"Sid": "EnableAnotherAWSAccountToReadTheSecret",
+		"Effect": "Allow",
+		"Principal": {
+			"AWS": "arn:aws:iam::239312700453:root"
+		},
+		"Action": "secretsmanager:GetSecretValue",
+		"Resource": "*"
+	}]
+}

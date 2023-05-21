@@ -1,14 +1,14 @@
 output "group_names" {
   description = "Name of the Group created"
-  value       = aws_iam_group.group.*.name
+  value       = module.iam_group_mutiple.group_names
 }
 
 output "user_names" {
   description = "Name of the users created"
-  value       = aws_iam_user.user.*.name
+  value       = module.iam_group_mutiple.user_names
 }
 
 output "policy_names" {
   description = "Name of the policies created"
-  value       = aws_iam_policy.policy.*.name
+  value       = module.iam_group_mutiple.policy_names
 }

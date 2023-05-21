@@ -1,8 +1,8 @@
 output "ebs_volume_arn" {
-  description = "ARN of the created ebs module"
-  value       = aws_ebs_volume.ebs_volumes[*].arn
+  value       = module.ebs_volume_and_snapshot.ebs_volume_arn
+  description = "ARNs of ebs volumes"
 }
 output "ebs_snapshot_arn" {
-  description = "ARN of the created ebs snapshot"
-  value       = aws_ebs_snapshot.ebs_snapshot[*].arn
+  value       = module.ebs_volume_and_snapshot.ebs_snapshot_arn
+  description = "ARNs of ebs snapshots"
 }

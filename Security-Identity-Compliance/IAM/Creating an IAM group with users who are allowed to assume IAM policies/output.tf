@@ -1,11 +1,11 @@
 output "group_name" {
   description = "Name of the Group created"
-  value       = aws_iam_group.new_group.name
+  value       = module.iam_group.group_name
 }
 
 output "group_arn" {
   description = "ARN of the Group created"
-  value       = aws_iam_group.new_group.arn
+  value       = module.iam_group.group_arn
 }
 
 output "policy_arn" {

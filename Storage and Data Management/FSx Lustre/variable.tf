@@ -118,16 +118,16 @@ variable "log_configuration" {
   default     = null
 }
 
-variable "level" {
-  type        = string
-  description = "Sets which data repository events are logged by Amazon FSx."
-  default     = "DISABLED"
-}
-
 variable "kms_key_alias_name" {
   description = "Provide Alias name for Customer Managed KMS Key for FSx. Provide the null value for using the default AWS-managed KMS encryption."
   type        = string
   default     = null
+}
+
+variable "level" {
+  type        = string
+  description = "Sets which data repository events are logged by Amazon FSx."
+  default     = "DISABLED"
 }
 
 variable "data_compression_type" {

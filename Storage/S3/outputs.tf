@@ -1,9 +1,9 @@
 output "bucket_arn" {
   description = "ARN of the S3 bucket"
-  value       = aws_s3_bucket.create_s3_bucket.arn
+  value = module.S3.bucket_arn
 }
 
 output "bucket_id" {
   description = "ID of the S3 bucket"
-  value       = aws_s3_bucket.create_s3_bucket.id
+  value       = module.S3.bucket_id
 }

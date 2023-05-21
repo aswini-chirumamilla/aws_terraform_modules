@@ -1,0 +1,12 @@
+{
+    "Id": "Policy1670839547574",
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "Stmt1670839543480",
+        "Action": "s3:*",
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::gadgets717/*"
+      }
+    ]
+  }

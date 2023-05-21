@@ -1,3 +1,15 @@
+#----------------------Variables for Provider-----------------------------------------------------------#
+
+variable "aws_region" {
+  description = "AWS_Region"
+  type        = string
+}
+
+variable "aws_profile" {
+  description = "AWS_profile"
+  type        = string
+}
+
 #-----------------------Variables for S3 bucket creation-----------------------------------------------#
 
 variable "s3_bucket_name" {
@@ -34,19 +46,20 @@ variable "expected_bucket_owner_accelerate_config" {
 variable "bucket_accelerate_status" {
   description = "The transfer acceleration state of the bucket. Valid values: Enabled, Suspended."
   type        = string
-  default     = null
+  default = null
 }
 
 #-----------Variables for bucket ACL-------------------------------------------------------------------#
 
 variable "expected_bucket_owner_bucket_acl" {
-  description = "(Forces new resource) The account ID of the expected bucket owner. Value for this parameter should be entered only if proper input value is provided for s3_bucket_acl"
+  
   type        = string
   default     = null
+ description = "(Forces new resource) The account ID of the expected bucket owner. Value for this parameter should be entered only if proper input value is provided for s3_bucket_acl"
 }
 
 variable "s3_bucket_acl" {
-  description = "The canned ACL to apply to the bucket. Valid Calues : 'private', 'public-read' , 'public-read-write', 'aws-exec-read', 'authenticated-read', 'bucket-owner-read', 'bucket-owner-full-control' or 'log-delivery-write'."
+  description = "The canned ACL to apply to the bucket. Valid Calues : 'private', 'public-read' , 'public-read-write', 'aws-exec-read', 'authenticated-read', 'bucket-owner-read', 'bucket-owner-full-control' or 'log-delivery-write'. "
   type        = string
   default     = null
 }
@@ -72,8 +85,8 @@ variable "cors_rule" {
     allowed_origins = list(string)           # (Required) Set of origins you want customers to be able to access the bucket from.
     allowed_headers = optional(list(string)) # (Optional) Set of Headers that are specified in the Access-Control-Request-Headers header.
     expose_headers  = optional(list(string)) # (Optional) Set of headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object).
-    cors_rule_id    = optional(string, null) # (Optional) Unique identifier for the rule. The value cannot be longer than 255 characters.
-    max_age_seconds = optional(number, null) #  (Optional) The time in seconds that your browser is to cache the preflight response for the specified resource.
+    cors_rule_id    = optional(string , null)       # (Optional) Unique identifier for the rule. The value cannot be longer than 255 characters.
+    max_age_seconds = optional(number , null)       #  (Optional) The time in seconds that your browser is to cache the preflight response for the specified resource.
   }))
   default = []
 }
@@ -87,7 +100,7 @@ variable "enable_s3_bucket_lifecycle_configuration" {
 }
 
 variable "s3_lifecycle_configuration_rule" {
-  description = "An S3 Lifecycle configuration is a block consists of one or more Lifecycle rules. Each rule consists of the following: 1.Rule metadata (id and status).  2.Filter identifying objects to which the rule applies. 3.One or more transition or expiration actions."
+  description = "An S3 Lifecycle configuration is a block consists of one or more Lifecycle rules. Each rule consists of the following: 1.Rule metadata (id and status).  2.Filter identifying objects to which the rule applies. 3.One or more transition or expiration actions"
   type = list(object({
     id = string
     expiration = optional(list(object({
@@ -95,9 +108,9 @@ variable "s3_lifecycle_configuration_rule" {
     })))
     status = string # (Required) Whether the rule is currently being applied. Valid values: Enabled or Disabled.
     filter = optional(list(object({
-      object_size_greater_than = optional(number, null) # (Optional) Minimum object size (in bytes) to which the rule applies.
-      object_size_less_than    = optional(number, null) # (Optional) Maximum object size (in bytes) to which the rule applies.
-      prefix                   = optional(string, null) # (Optional) Prefix identifying one or more objects to which the rule applies. Defaults to an empty string ("") if not specified.
+      object_size_greater_than = optional(number , null) # (Optional) Minimum object size (in bytes) to which the rule applies.
+      object_size_less_than    = optional(number , null) # (Optional) Maximum object size (in bytes) to which the rule applies.
+      prefix                   = optional(string , null) # (Optional) Prefix identifying one or more objects to which the rule applies. Defaults to an empty string ("") if not specified.
     })))
   }))
   default = []
@@ -145,7 +158,7 @@ variable "role" {
 }
 
 variable "replication_configuration_token" {
-  description = "A token to allow replication to be enabled on an Object Lock-enabled bucket. You must contact AWS support for the bucket's Object Lock token. Value for this parameter should not be entered until proper input value is provided for role and replication_configuration_rule "
+  description = "A token to allow replication to be enabled on an Object Lock-enabled bucket. You must contact AWS support for the bucket's Object Lock token. Input for this parameter should not be entered until proper input values are provided for role and replication_configuration_rule"
   type        = string
   default     = null
 }
@@ -154,9 +167,9 @@ variable "replication_configuration_rule" {
   description = "(Required) List of configuration blocks describing the rules managing the replication"
   type = list(object({
     destination = list(object({
-      destination_bucket = string                 # (Required) The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store the results.
-      account            = optional(string, null) # (Optional) The Account ID to specify the replica ownership. Must be used in conjunction with access_control_translation override configuration.
-      storage_class      = optional(string, null) # (Optional) The storage class used to store the object. By default, Amazon S3 uses the storage class of the source object to create the object replica.
+      destination_bucket = string           # (Required) The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store the results.
+      account            = optional(string , null) # (Optional) The Account ID to specify the replica ownership. Must be used in conjunction with access_control_translation override configuration.
+      storage_class      = optional(string , null) # (Optional) The storage class used to store the object. By default, Amazon S3 uses the storage class of the source object to create the object replica.
       access_control_translation = optional(list(object({
         owner = string # (Required) Specifies the replica ownership. For default and valid values, see PUT bucket replication in the Amazon S3 API Reference. Valid values: Destination.
       })))
@@ -183,8 +196,8 @@ variable "replication_configuration_rule" {
     existing_object_replication = optional(list(object({
       existing_object_replication_status = string # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
     })))
-    id       = optional(string, null) # (Optional) Unique identifier for the rule. Must be less than or equal to 255 characters in length
-    priority = optional(number, null) # (Optional) The priority associated with the rule. Priority should only be set if filter is configured. If not provided, defaults to 0. Priority must be unique between multiple rules.
+    id       = optional(string , null) # (Optional) Unique identifier for the rule. Must be less than or equal to 255 characters in length
+    priority = optional(number , null) # (Optional) The priority associated with the rule. Priority should only be set if filter is configured. If not provided, defaults to 0. Priority must be unique between multiple rules.
     source_selection_criteria = optional(list(object({
       replica_modifications = optional(list(object({
         replica_modifications_status = string # (Required) Whether the existing objects should be replicated. Either "Enabled" or "Disabled".
@@ -194,9 +207,9 @@ variable "replication_configuration_rule" {
       })))
     })))
     filter = optional(list(object({
-      and = optional(list(object({          #  Configuration block for specifying rule filters. This element is required only if you specify more than one filter.
-        and_prefix = optional(string, null) # (Optional) An object key name prefix that identifies subset of objects to which the rule applies. Must be less than or equal to 1024 characters in length.
-        and_tags   = optional(map(string))  # (Optional, Required if prefix is configured) A map of tags (key and value pairs) that identifies a subset of objects to which the rule applies. The rule applies only to objects having all the tags in its tagset.
+      and = optional(list(object({                #  Configuration block for specifying rule filters. This element is required only if you specify more than one filter.
+        and_prefix = optional(string , null)      # (Optional) An object key name prefix that identifies subset of objects to which the rule applies. Must be less than or equal to 1024 characters in length.
+        and_tags   = optional(map(string)) # (Optional, Required if prefix is configured) A map of tags (key and value pairs) that identifies a subset of objects to which the rule applies. The rule applies only to objects having all the tags in its tagset.
       })))
       prefix = string # (Optional) An object key name prefix that identifies subset of objects to which the rule applies. Must be less than or equal to 1024 characters in length.
       tag = optional(list(object({
@@ -219,7 +232,7 @@ variable "expected_bucket_owner_payment_config" {
 variable "payer" {
   description = "Specifies who pays for the download and request fees. Valid values: BucketOwner, Requester"
   type        = string
-  default     = null
+  default = null
 }
 
 #--------------Variables for Server side encryption Configuration--------------------------------------#
@@ -231,7 +244,7 @@ variable "enable_s3_bucket_server_side_encryption_configuration" {
 }
 
 variable "expected_bucket_owner_server_side_encryption_config" {
-  description = "(Forces new resource) The account ID of the expected bucket owner. Value for this parameter should be entered only if proper input value is provided for server_side_configuration_rule"
+  description = "(Forces new resource) The account ID of the expected bucket owner. Value for this parameter should be entered only if proper input value is provided for  server_side_encryption_configuration_rule"
   type        = string
   default     = null
 }
@@ -242,7 +255,7 @@ variable "server_side_encryption_configuration_rule" {
     bucket_key_enabled = optional(bool, false)
     apply_server_side_encryption_by_default = optional(list(object({
       sse_algorithm     = string
-      kms_master_key_id = optional(string, null)
+      kms_master_key_id = optional(string , null)
     })))
   }))
   default = []
@@ -272,7 +285,7 @@ variable "versioning_configuration" {
   description = "Configuration block for versioning of s3 bucket"
   type = list(object({
     versioning_status = string
-    mfa_delete        = optional(string, null)
+    mfa_delete        = optional(string , null)
   }))
   default = []
 }

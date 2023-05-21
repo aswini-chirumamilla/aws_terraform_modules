@@ -1,20 +1,8 @@
-#group
-resource "aws_iam_group" "new_group" {
-  name = var.aws_new_group
+module "iam_group" {
+  source        = "../../../../Modules/Security-Identity-Compliance/IAM/Creating an IAM group with users who are allowed to assume IAM policies"
+  name          = var.name
+  aws_new_group = var.aws_new_group
+  group_users   = var.group_users
+  assume_role   = var.assume_role
+  usercount     = 1
 }
-
-#adding users to group
-resource "aws_iam_group_membership" "new_group" {
-  count = length(var.group_users) > 0 ? 1 : 0
-  group = aws_iam_group.new_group.id
-  name  = aws_iam_group.new_group.name
-  users = toset(data.aws_iam_user.users.*.user_name)
-}
-
-#Attaching a policy to group
-resource "aws_iam_group_policy_attachment" "attach_group" {
-  count      = length(var.assume_role)
-  group      = aws_iam_group.new_group.name
-  policy_arn = data.aws_iam_policy.custom_policy.*.arn[count.index]
-}
-

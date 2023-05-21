@@ -1,3 +1,15 @@
+variable "region" {
+  description = " Name of region "
+  type        = string
+  default     = "ap-south-1"
+}
+
+variable "profile" {
+  description = "Name of profile"
+  type        = string
+  default     = "ArulSaxena"
+}
+
 variable "name" {
   description = "Name for the IAM User"
   type        = list(string)
